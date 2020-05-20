@@ -12,4 +12,8 @@ public class Constants {
 
     //手机注册验证码前缀
     public static final String POHONE_SMS_ACTIVE_PREFIX="activation:";
+    //token前缀
+    public static final String TOKEN_PRIFIX="token:";
+    //token非移动端的有效期
+    public static final Integer TOKEN_EXPIRE = 2;
 }

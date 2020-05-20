@@ -24,6 +24,24 @@
     </properties>
 
     <dependencies>
+
+<!--客户端解析工具-->
+        <dependency>
+            <groupId>com.moilioncircle</groupId>
+            <artifactId>user-agent-utils</artifactId>
+            <version>1.50</version>
+        </dependency>
+<!--Servlet依赖-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+<!--容联云短信服务-->
+        <dependency>
+            <groupId>com.cloopen</groupId>
+            <artifactId>java-sms-sdk</artifactId>
+            <version>1.0.1</version>
+        </dependency>
         <dependency>
             <groupId>cn.itrip</groupId>
             <artifactId>itrip-dao</artifactId>
@@ -63,6 +81,16 @@
 
     <build>
         <finalName>itrip-auth</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
 
     </build>
 </project>
