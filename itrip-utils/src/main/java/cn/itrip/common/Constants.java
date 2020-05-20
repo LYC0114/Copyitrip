@@ -16,4 +16,6 @@ public class Constants {
     public static final String TOKEN_PRIFIX="token:";
     //token非移动端的有效期
     public static final Integer TOKEN_EXPIRE = 2;
+    //token保护期
+    public static final Integer TOKEN_PROTECT_TIME = 1;//小时
 }

@@ -3,6 +3,7 @@ package cn.itrip.auth.service;
 import cn.itrip.beans.pojo.ItripUser;
 import cn.itrip.beans.vo.ItripTokenVO;
 import cn.itrip.common.Constants;
+import cn.itrip.common.EmptyUtils;
 import cn.itrip.common.MD5;
 
 import cn.itrip.common.RedisAPI;
@@ -18,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 public class TokenServiceImpl implements TokenService {
     @Resource
     private RedisAPI redisAPI;
+    //生成token
     @Override
     public String ganerateToken(String agent, ItripUser itripUser) throws Exception {
         //token:客户端标识-USERCODE-USERID-CREATIONDATE-RONDEM[6位]
@@ -52,7 +54,7 @@ public class TokenServiceImpl implements TokenService {
         if(token.startsWith(Constants.TOKEN_PRIFIX+"MOBILE")){//移动端
             redisAPI.set(token,userJson);
         }else{//PC端
-            redisAPI.set(token,Constants.TOKEN_EXPIRE*60*60,userJson);
+            redisAPI.set(token,Constants.TOKEN_EXPIRE*60*60*1000,userJson);
         }
     }
 //处理token包括，生成-缓存-返回
@@ -67,5 +69,52 @@ public class TokenServiceImpl implements TokenService {
         long genTime=System.currentTimeMillis();
         ItripTokenVO tokenVO = new ItripTokenVO(token,expTIme,genTime);
         return tokenVO;
+    }
+//验证token有效性
+    @Override
+    public Boolean validatetoken(String token, String agent) throws Exception {
+        //token判空
+        if(EmptyUtils.isEmpty(token)){
+            //未携带token信息
+            throw new AuthException("未携带token信息");
+        }
+        /*判断是否为同一个客户
+        * token：PC-3066014faOb10792e4a762-23-20170531133947-4f6496*/
+        String[] tokenArr = token.split("-");
+        if(!tokenArr.equals(MD5.getMd5(agent,6))){
+            //不是原来的客户端
+            throw new AuthException("不是同一个客户端未登录");
+        }
+        String gentimeStr = tokenArr[3];
+        LocalDateTime genTime = LocalDateTime.parse(gentimeStr, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        long time= genTime.toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        //判断token是否超时
+        if(System.currentTimeMillis()-time>Constants.TOKEN_EXPIRE*60*60*1000){
+            //token过期未登录状态；
+            throw new AuthException("token过期");
+        }
+        return true;
+    }
+//删除token
+    @Override
+    public void deltoken(String token) throws Exception {
+        redisAPI.delete(token);
+    }
+
+    @Override
+    public String relodeToken(String token,String agent)throws Exception {
+        String userJson = redisAPI.get(token);
+        ItripUser itripUser = JSON.parseObject(userJson, ItripUser.class);
+
+        String s = token.split("-")[3];
+        LocalDateTime time = LocalDateTime.parse(s, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        long genTime = time.toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        if(System.currentTimeMillis()-genTime<Constants.TOKEN_PROTECT_TIME*60*60*1000){
+            throw new AuthException("保护期不允许置换");
+        }
+        String newToken = this.ganerateToken(agent, itripUser);
+        this.saveToken(newToken,itripUser);
+        redisAPI.set("token",2*60,userJson);
+        return newToken;
     }
 }
