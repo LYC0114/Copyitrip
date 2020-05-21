@@ -9,15 +9,13 @@ import cn.itrip.common.EmptyUtils;
 import cn.itrip.common.ErrorCode;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.regex.Pattern;
 
-@Controller
+//@Controller
+@RestController//@RestController等同于Controller+ResponseBody
 @RequestMapping("/api")
 public class UserController {
     @Resource
@@ -53,4 +51,20 @@ public class UserController {
         return Pattern.compile(regex).matcher(phone).find();
     }
 
+
+
+    //手机注册短信验证
+@RequestMapping("/Validatephone")
+//传入用户名和短信验证码
+    public Dto Validatephone(@RequestParam("name") String userCode,@RequestParam("code") String smscode) throws Exception {
+        //调用验证方法，获取返回值
+        Boolean b=userService.itriptxValidateSmsCode(userCode,smscode);
+        if(b){
+            //返回为true成功
+            return DtoUtil.returnSuccess("短信验证成功");
+        }else{
+            //返回为false不成功
+            return DtoUtil.returnFail("短信验证码失败",ErrorCode.AUTH_ACTIVATE_FAILED);
+        }
+    }
 }

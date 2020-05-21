@@ -1,5 +1,6 @@
 package cn.itrip.auth.service;
 
+import cn.itrip.auth.AuthException;
 import cn.itrip.beans.pojo.ItripUser;
 import cn.itrip.beans.vo.ItripTokenVO;
 import cn.itrip.common.Constants;

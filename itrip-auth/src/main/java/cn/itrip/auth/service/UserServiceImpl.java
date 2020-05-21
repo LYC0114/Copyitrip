@@ -1,12 +1,14 @@
 package cn.itrip.auth.service;
 
 import cn.itrip.beans.pojo.ItripUser;
+import cn.itrip.common.Constants;
 import cn.itrip.common.MD5;
 import cn.itrip.common.RedisAPI;
 import cn.itrip.mapper.itripUser.ItripUserMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,10 @@ public class UserServiceImpl implements UserService {
     private SmsService smsService;
     @Resource
     private ItripUserMapper itripUserMapper;
+
+
+
+
     //根据userCode查询用户数据
     @Override
     public ItripUser getItripUserByUserCode(String userCode)throws Exception {
@@ -29,6 +35,10 @@ public class UserServiceImpl implements UserService {
         }
         return List.get(0);
     }
+
+
+
+
 
     @Override
     public void itriptxCreateItripUser(ItripUser itripUser) throws Exception {
@@ -41,6 +51,36 @@ public class UserServiceImpl implements UserService {
         int expire=1;
         smsService.send(itripUser.getUserCode(),"1",new String[]{String.valueOf(code),String.valueOf(expire)});
         //缓存短信验证码
-        redisAPI.set("activation"+itripUser.getUserCode(),expire*60,String.valueOf(code));
+        redisAPI.set(Constants.POHONE_SMS_ACTIVE_PREFIX +itripUser.getUserCode(),expire*60,String.valueOf(code));
+    }
+
+
+
+
+
+
+//激活并存入用户，如果没激活则将用户删除
+    @Override
+    public Boolean itriptxValidateSmsCode(String userCode, String smscode) throws Exception {
+        //验证短信验证码
+        String cacheCode = redisAPI.get(Constants.POHONE_SMS_ACTIVE_PREFIX + userCode);
+        ItripUser itripUser = this.getItripUserByUserCode(userCode);
+        if (cacheCode != null && cacheCode.equals(smscode)) {
+            //成功后修改数据库中记录（激活  0。未激活  1。激活）
+            itripUser.setActivated(1);
+            itripUser.setUserType(0);//用户类型自注册
+            itripUser.setUserName("hello");
+            itripUser.setFlatID(itripUser.getId());
+            itripUser.setCreationDate(new Date());
+            return true;
+        }
+        //失败，删除数据库中用户
+        itripUserMapper.deleteItripUserById(itripUser.getId());
+        return false;
+    }
+//修改用户
+    @Override
+    public void updateItripUser(ItripUser user) throws Exception {
+        itripUserMapper.updateItripUser(user);
     }
 }
