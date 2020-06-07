@@ -144,4 +144,8 @@
     <delete id="deleteItripOrderLinkUserById" parameterType="Long">
         delete from itrip_order_link_user where id = #{id}
     </delete>
+<!--    根据订单id删除联系人-->
+    <delete id="deleteItripOrderLinkUserByOrderId" parameterType="Long">
+        delete from itrip_order_link_user where id=#{id}
+    </delete>
 </mapper>

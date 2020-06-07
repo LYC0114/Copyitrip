@@ -17,5 +17,10 @@ public interface ItripHotelTempStoreMapper {
 	public Integer updateItripHotelTempStore(ItripHotelTempStore itripHotelTempStore)throws Exception;
 
 	public Integer deleteItripHotelTempStoreById(@Param(value = "id") Long id)throws Exception;
+//刷新库存（查询对应房型和日期的记录，无记录则插入记录）
+    void flushTempStore(Map<String, Object> param)throws Exception;
 
+    List<ItripHotelTempStore> getItripStoreListByMap(Map<String, Object> param)throws Exception;
+//修改实时库存表
+    void updateTempStore(Map<String, Object> param)throws Exception;
 }

@@ -244,7 +244,7 @@
         </trim>
     </select>
 
-    <insert id="insertItripHotelOrder" parameterType="cn.itrip.beans.pojo.ItripHotelOrder">
+    <insert id="insertItripHotelOrder" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="cn.itrip.beans.pojo.ItripHotelOrder">
         insert into itrip_hotel_order(
                         userId,
                         orderType,
@@ -391,4 +391,11 @@
     <delete id="deleteItripHotelOrderById" parameterType="Long">
         delete from itrip_hotel_order where id = #{id}
     </delete>
+<!--    修改超时未支付的订单-->
+    <update id="flushOrderStatus">
+        update  itrip_hotel_order set orderStat.us=1
+        where orderStatus=0
+        and
+            TIMESTAMPDIFF(SECOND,creationDate,NOW())>2*60*60
+    </update>
 </mapper>

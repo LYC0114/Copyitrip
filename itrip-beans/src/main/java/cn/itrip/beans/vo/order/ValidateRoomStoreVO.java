@@ -2,6 +2,7 @@ package cn.itrip.beans.vo.order;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,8 +20,10 @@ public class ValidateRoomStoreVO implements Serializable{
     @ApiModelProperty("[必填，注：接收数字类型 房间ID")
     private Long roomId;
     @ApiModelProperty("[必填，注：接收日期类型 入住时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date checkInDate;
     @ApiModelProperty("[必填，注：接收日期类型 退房时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date checkOutDate;
     @ApiModelProperty("[必填，默认请传1")
     private Integer count;

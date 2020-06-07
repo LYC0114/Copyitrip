@@ -17,5 +17,6 @@ public interface ItripHotelOrderMapper {
 	public Integer updateItripHotelOrder(ItripHotelOrder itripHotelOrder)throws Exception;
 
 	public Integer deleteItripHotelOrderById(@Param(value = "id") Long id)throws Exception;
-
+    //扫描订单表中超时未支付的订单并修改状态为已取消
+    void flushOrderStatus()throws Exception;
 }

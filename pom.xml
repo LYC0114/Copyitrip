@@ -16,6 +16,7 @@
         <module>itrip-search</module>
         <module>itrip-trade</module>
         <module>Demo</module>
+        <module>SolrDemo</module>
     </modules>
     <packaging>pom</packaging><!--maven继承工程的父工程-->
     <!--依赖管理：主要管理版本和作用域-->

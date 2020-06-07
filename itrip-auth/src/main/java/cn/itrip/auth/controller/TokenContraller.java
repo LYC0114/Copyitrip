@@ -30,7 +30,7 @@ public class TokenContraller {
             newToken=tokenService.relodeToken(token,agent);
         }
         //返回新token
-        int expTime = Constants.TOKEN_EXPIRE * 60 * 60 * 1000;
+        int expTime = Constants.TOKEN_EXPIRE*60*60*1000;
         long genTime = System.currentTimeMillis();
         ItripTokenVO tokenVO = new ItripTokenVO(newToken,expTime,genTime);
         return DtoUtil.returnDataSuccess(tokenVO);

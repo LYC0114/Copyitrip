@@ -157,4 +157,37 @@
     <delete id="deleteItripHotelTempStoreById" parameterType="Long">
         delete from itrip_hotel_temp_store where id = #{id}
     </delete>
+    <!--刷新库存-->
+    <update id="flushTempStore" parameterType="Map" statementType="CALLABLE">
+        {
+        call pre_flush_store(
+        #{checkInDate,jdbcType=TIMESTAMP,mode=IN},
+        #{checkOutDate,jdbcType=TIMESTAMP,mode=IN},
+        #{room,jdbcType=BIGINT,mode=IN},
+        #{hotelId,jdbcType=BIGINT,mode=IN}
+        )
+        }
+    </update>
+<!--查询并计算剩余库存-->
+    <select id="getItripStoreListByMap" parameterType="Map" resultType="cn.itrip.beans.pojo.ItripHotelTempStore">
+        select s.roomId,s.recordDate,s.score-(
+
+        )
+        from itrip_hotel_temp_store s JOIN  itrip_hotel_order o
+        ON s.roomId=o.roomId
+        where roomId=#{roomId}
+        AND recordDate
+        between DATE_FORMAT(#{checkInDate},'%Y-%m-%d')
+        and DATE_FORMAT(#{checkOutDate},'%Y-%m-%d')
+    </select>
+
+<!--  支付成功后修改实时库存表  -->
+    <update id="updateTempStore" parameterType="Map">
+        update itrip_hotel_temp_store
+        set store=store-#{count }
+        where roomId=#{roomId}
+        and recordDate
+        between DATE_FORMAT(#{checkInDate},'%Y-%m-%d')
+        and DATE_FORMAT(#{checkOutDate},'%Y-%m-%d')
+    </update>
 </mapper>

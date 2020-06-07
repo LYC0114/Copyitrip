@@ -30,7 +30,7 @@ public class Demo3 {
         //封装表数据
         Table table = new Table();
         table.setTableName("itrip_user");
-        List<Column> cols = new ArrayList<>();
+        List<Column> cols = new ArrayList<Column>();
         Column col;
         //遍历所有列
         while (columns.next()) {
@@ -50,7 +50,7 @@ public class Demo3 {
         //释放资源
         conn.close();
         //模板数据
-        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<String, Object>();
         data.put("table", table);
         //获取模板对象
         Configuration conf = new Configuration(Configuration.getVersion());

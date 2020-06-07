@@ -28,7 +28,7 @@
 		<property name="driverClass" value="${mysql.driver}"/>
 		<property name="jdbcUrl" value="${mysql.url}"/>
 		<property name="user" value="${mysql.user}"/>
-		<property name="password" value="${mysql.password}"/>
+		<property name="password" value="${mysql.password}45"/>
 	</bean>
 	<!-- 事务管理   -->
 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

@@ -37,12 +37,12 @@ public class Demo1 {
         User user3=new User();
         user3.setName("");
         user3.setPassword("444");
-        List<User> list = new ArrayList<>();
+        List<User> list = new ArrayList<User>();
         list.add(user);
         list.add(user1);
         list.add(user2);
         list.add(user3);
-        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data = new HashMap<String, Object>();
         data.put("name", "tom123");
         data.put("user", user);
         data.put("users", list);

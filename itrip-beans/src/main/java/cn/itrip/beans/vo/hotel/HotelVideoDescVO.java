@@ -2,6 +2,7 @@ package cn.itrip.beans.vo.hotel;
 
 import io.swagger.annotations.ApiModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class HotelVideoDescVO {
         this.hotelName = hotelName;
     }
 
-    public List<String> getTradingAreaNameList() {
+    public List<String> getTradingAreaNameList(ArrayList<String> treadAreaNameList) {
         return tradingAreaNameList;
     }
 
@@ -34,7 +35,7 @@ public class HotelVideoDescVO {
         this.tradingAreaNameList = tradingAreaNameList;
     }
 
-    public List<String> getHotelFeatureList() {
+    public List<String> getHotelFeatureList(ArrayList<String> featureNameList) {
         return hotelFeatureList;
     }
 
