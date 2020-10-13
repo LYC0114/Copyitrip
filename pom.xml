@@ -20,7 +20,7 @@
     <!--依赖管理：主要管理版本和作用域-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <jackson.verson>2.10.0</jackson.verson>
         <spring.version>4.3.25.RELEASE</spring.version>
         <mybatis.version>3.5.0</mybatis.version>
